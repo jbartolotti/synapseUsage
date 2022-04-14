@@ -121,52 +121,49 @@ analyzeProcesses <- function(prc){
   return(returndat)
 }
 
-generateFigs <- function(proc_grid_cpu, proc_cpu, usg, m, savedir){
+generateFigs <- function(pgc, pc, usg, m, savedir){
 
   #Process Figures
-  ggplot2::ggplot(proc_grid_cpu, aes(x = epoch, y = CPU/2400*100,fill = USER)) +
-    theme_bw() +
-    geom_hline(yintercept = 100, color = 'black') +
-    geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
-    geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
-    geom_area(position = 'stack',alpha = 1) +
-    geom_vline(xintercept = m$day_markers,color = 'black', size = 1) +
-    #  geom_point(size = 1 ) +
-    #  geom_line(size = 1 ) +
-    scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
-    scale_y_continuous(breaks = m$cpu_breaks, labels = m$cpu_labels) +
-    labs(x = '', y = 'Number of CPUs',title = 'Synapse CPU use by user') +
-    coord_cartesian(xlim = c(m$xstart,m$xend), ylim = c(0,100)) +
-    theme(legend.position = 'none')
+  ggplot2::ggplot(pgc, aes(x = .pgc$epoch, y = .pgc$CPU/2400*100,fill = .pgc$USER)) +
+    ggplot2::theme_bw() +
+    ggplot2::geom_hline(yintercept = 100, color = 'black') +
+    ggplot2::geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
+    ggplot2::geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
+    ggplot2::geom_area(position = 'stack',alpha = 1) +
+    ggplot2::geom_vline(xintercept = m$day_markers,color = 'black', size = 1) +
+    ggplot2::scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
+    ggplot2::scale_y_continuous(breaks = m$cpu_breaks, labels = m$cpu_labels) +
+    ggplot2::labs(x = '', y = 'Number of CPUs',title = 'Synapse CPU use by user') +
+    ggplot2::coord_cartesian(xlim = c(m$xstart,m$xend), ylim = c(0,100)) +
+    ggplot2::theme(legend.position = 'none')
   ggplot2::ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_processes_user_%s.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
   
   
-  ggplot2::ggplot(proc_cpu, aes(x = epoch, y = CPU/2400*100,color = USER)) +
-    theme_bw() +
-    geom_hline(yintercept = 100, color = 'black') +
-    geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
-    geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
-    geom_vline(xintercept = m$day_markers,color = 'black', size = 1) +
-    geom_point(size = 1, alpha = .7 ) +
-    #  geom_line(size = 1 ) +
-    scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
-    scale_y_continuous(breaks = m$cpu_breaks, labels = m$cpu_labels) +
-    labs(x = '', y = 'Number of CPUs',title = 'Synapse CPU use by user') +
-    coord_cartesian(xlim = c(m$xstart,m$xend), ylim = c(0,100)) +
-    theme(legend.position = 'none')
+  ggplot2::ggplot(pc, aes(x = .pc$epoch, y = .pc$CPU/2400*100,color = .pc$USER)) +
+    ggplot2::theme_bw() +
+    ggplot2::geom_hline(yintercept = 100, color = 'black') +
+    ggplot2::geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
+    ggplot2::geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
+    ggplot2::geom_vline(xintercept = m$day_markers,color = 'black', size = 1) +
+    ggplot2::geom_point(size = 1, alpha = .7 ) +
+    ggplot2::scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
+    ggplot2::scale_y_continuous(breaks = m$cpu_breaks, labels = m$cpu_labels) +
+    ggplot2::labs(x = '', y = 'Number of CPUs',title = 'Synapse CPU use by user') +
+    ggplot2::coord_cartesian(xlim = c(m$xstart,m$xend), ylim = c(0,100)) +
+    ggplot2::theme(legend.position = 'none')
   ggplot2::ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_processes_user_%s_line.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
   
   #Usage Figure
-  ggplot2::ggplot(usg, aes(x = epoch, y = cpu)) +
-    theme_bw() +
-    geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
-    geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
-    geom_vline(xintercept = m$day_markers,color = 'black', size = 1) +
-    geom_point(color = 'red', size = .5) +
-    geom_point(aes(y = mem), color = 'blue',size = .5)+
-    scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
-    coord_cartesian(xlim = c(m$xstart,m$xend)) +
-    labs(x = '', y = 'Percent Usage', title = 'Synapse CPU (red) and RAM (blue) Usage')
+  ggplot2::ggplot(usg, aes(x = .usg$epoch, y = .usg$cpu)) +
+    ggplot2::theme_bw() +
+    ggplot2::geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
+    ggplot2::geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
+    ggplot2::geom_vline(xintercept = m$day_markers,color = 'black', size = 1) +
+    ggplot2::geom_point(color = 'red', size = .5) +
+    ggplot2::geom_point(aes(y = .usg$mem), color = 'blue',size = .5)+
+    ggplot2::scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
+    ggplot2::coord_cartesian(xlim = c(m$xstart,m$xend)) +
+    ggplot2::labs(x = '', y = 'Percent Usage', title = 'Synapse CPU (red) and RAM (blue) Usage')
   ggplot2::ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_Usage_%s.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
 
 }
