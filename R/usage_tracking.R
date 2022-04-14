@@ -113,10 +113,10 @@ analyzeProcesses <- function(prc){
   proc_cpu_grid$CPU[is.na(proc_cpu_grid$CPU)] <- 0
   
   returndat <- list()
-  returndat$alldat
-  returndat$proc_cpu
-  returndat$proc_cpu_command
-  returndat$proc_cpu_grid
+  returndat$alldat <- alldat
+  returndat$proc_cpu <- proc_cpu
+  returndat$proc_cpu_command <- proc_cpu_command
+  returndat$proc_cpu_grid <- proc_cpu_grid
   
   return(returndat)
 }
