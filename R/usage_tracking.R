@@ -98,9 +98,9 @@ analyzeProcesses <- function(prc){
   
   alldat <- do.call('rbind',all_dfs)
   
-  proc_cpu = alldat %>% group_by(USER,epoch) %>% summarize(sum(CPU))
+  proc_cpu = alldat %>% dplyr::group_by(USER,epoch) %>% dplyr::summarize(sum(CPU))
   names(proc_cpu)[3] = 'CPU'
-  proc_cpu_command = alldat %>% group_by(USER,epoch,COMMAND) %>% summarize(sum(CPU))
+  proc_cpu_command = alldat %>% dplyr::group_by(USER,epoch,COMMAND) %>% dplyr::summarize(sum(CPU))
   names(proc_cpu_command)[4] = 'CPU'
   proc_cpu_command$USER_COMMAND = paste(proc_cpu_command$USER, proc_cpu_command$COMMAND,sep = '_')
   
