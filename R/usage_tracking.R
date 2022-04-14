@@ -8,9 +8,9 @@ synapseFigs <- function(logdir = '~', savedir = '~/R-Drive/Bartolotti_J/sysadmin
   dir.create(file.path(savedir,'usage_figs'), showWarnings = FALSE)
   datestring <- format(timenow, "%y%m%d_%H%M")
   imported <- importData(logdir, savedir, usage_filename, processes_filename, datestring)
-  firstday <- '22-03-31'
-  markers <- getMarkers(firstday, timenow, daysback)
   returndat <- analyzeProcesses(imported$prc)
+  firstday <- '22-03-31'
+  markers <- getMarkers(firstday, timenow, daysback,min(returndat$alldat$epoch))
   generateFigs(returndat$proc_cpu_grid, returndat$proc_cpu, imported$usg, markers, savedir)
 }
 
@@ -43,7 +43,7 @@ importData <- function(logdir, savedir, usage_filename, processes_filename, date
   return(imported)
 }
 
-getMarkers <- function(firstday, timenow, daysback){
+getMarkers <- function(firstday, timenow, daysback,firstreading){
   m <- list()
   m$first_day_epoch <- as.numeric(as.POSIXct(paste(firstday,'00:00:00',sep = '_'),format = '%y-%m-%d_%H:%M:%S'))
   m$end_time <- timenow
@@ -56,10 +56,10 @@ getMarkers <- function(firstday, timenow, daysback){
   m$cpu_breaks = seq(0,100,100/24)
   m$cpu_labels = 0:24
   m$cpu_labels[seq(2,24,2)] = ''
-  
-  m$xstart <- max(m$end_time_epoch - 60*60*24*daysback, max(m$day_markers))
+
+  m$xstart <- max(m$end_time_epoch - 60*60*24*daysback, max(m$day_markers[m$day_markers < firstreading]))
   m$xend <- m$end_time_epoch
-  
+
   return(m)
 }
 
