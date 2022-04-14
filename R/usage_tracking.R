@@ -124,7 +124,7 @@ analyzeProcesses <- function(prc){
 generateFigs <- function(proc_grid_cpu, proc_cpu, usg, m, savedir){
 
   #Process Figures
-  ggplot(proc_grid_cpu, aes(x = epoch, y = CPU/2400*100,fill = USER)) +
+  ggplot2::ggplot(proc_grid_cpu, aes(x = epoch, y = CPU/2400*100,fill = USER)) +
     theme_bw() +
     geom_hline(yintercept = 100, color = 'black') +
     geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
@@ -138,10 +138,10 @@ generateFigs <- function(proc_grid_cpu, proc_cpu, usg, m, savedir){
     labs(x = '', y = 'Number of CPUs',title = 'Synapse CPU use by user') +
     coord_cartesian(xlim = c(m$xstart,m$xend), ylim = c(0,100)) +
     theme(legend.position = 'none')
-  ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_processes_user_%s.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
+  ggplot2::ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_processes_user_%s.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
   
   
-  ggplot(proc_cpu, aes(x = epoch, y = CPU/2400*100,color = USER)) +
+  ggplot2::ggplot(proc_cpu, aes(x = epoch, y = CPU/2400*100,color = USER)) +
     theme_bw() +
     geom_hline(yintercept = 100, color = 'black') +
     geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
@@ -154,10 +154,10 @@ generateFigs <- function(proc_grid_cpu, proc_cpu, usg, m, savedir){
     labs(x = '', y = 'Number of CPUs',title = 'Synapse CPU use by user') +
     coord_cartesian(xlim = c(m$xstart,m$xend), ylim = c(0,100)) +
     theme(legend.position = 'none')
-  ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_processes_user_%s_line.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
+  ggplot2::ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_processes_user_%s_line.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
   
   #Usage Figure
-  ggplot(usg, aes(x = epoch, y = cpu)) +
+  ggplot2::ggplot(usg, aes(x = epoch, y = cpu)) +
     theme_bw() +
     geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
     geom_vline(xintercept = m$four_hour_markers,color = '#888888') +
@@ -167,7 +167,7 @@ generateFigs <- function(proc_grid_cpu, proc_cpu, usg, m, savedir){
     scale_x_continuous(breaks = m$day_markers, labels = as.character(as.POSIXct(m$day_markers,origin="1970-01-01"))) + 
     coord_cartesian(xlim = c(m$xstart,m$xend)) +
     labs(x = '', y = 'Percent Usage', title = 'Synapse CPU (red) and RAM (blue) Usage')
-  ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_Usage_%s.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
+  ggplot2::ggsave(file.path(savedir,'usage_figs',sprintf('Synapse_Usage_%s.png',gsub(':','-',gsub(' ','_',as.character(as.POSIXct(m$end_time,origin="1970-01-01")))))),height = 4, width=7)
 
 }
 
