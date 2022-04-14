@@ -1,4 +1,5 @@
-
+#' @importFrom magrittr "%>%"
+#' 
 #' @export
 synapseFigs <- function(logdir = '~', savedir = '~/R-Drive/Bartolotti_J/sysadmin/usagelogs', 
                         usage_filename = 'usage.txt', processes_filename = 'processes.txt', daysback = 7
