@@ -7,7 +7,7 @@ synapseFigs <- function(logdir = '~', savedir = '~/R-Drive/Bartolotti_J/sysadmin
   dir.create(file.path(savedir,'usage_figs'), showWarnings = FALSE)
   datestring <- format(timenow, "%y%m%d_%H%M")
   imported <- importData(logdir, savedir, usage_filename, processes_filename, datestring)
-  first_day <- '22-03-31'
+  firstday <- '22-03-31'
   markers <- getMarkers(firstday, timenow, daysback)
   returndat <- analyzeProcesses(imported$prc)
   generateFigs(returndat$proc_grid_cpu, returndat$proc_cpu, imported$usg, markers, savedir)
