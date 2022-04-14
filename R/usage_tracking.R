@@ -11,7 +11,7 @@ synapseFigs <- function(logdir = '~', savedir = '~/R-Drive/Bartolotti_J/sysadmin
   firstday <- '22-03-31'
   markers <- getMarkers(firstday, timenow, daysback)
   returndat <- analyzeProcesses(imported$prc)
-  generateFigs(returndat$proc_grid_cpu, returndat$proc_cpu, imported$usg, markers, savedir)
+  generateFigs(returndat$proc_cpu_grid, returndat$proc_cpu, imported$usg, markers, savedir)
 }
 
 
@@ -121,10 +121,9 @@ analyzeProcesses <- function(prc){
   return(returndat)
 }
 
-generateFigs <- function(pgc, pc, usg, m, savedir){
-
+generateFigs <- function(pcg, pc, usg, m, savedir){
   #Process Figures
-  ggplot2::ggplot(pgc, ggplot2::aes(x = epoch, y = CPU/2400*100,fill = USER)) +
+  ggplot2::ggplot(pcg, ggplot2::aes(x = epoch, y = CPU/2400*100,fill = USER)) +
     ggplot2::theme_bw() +
     ggplot2::geom_hline(yintercept = 100, color = 'black') +
     ggplot2::geom_vline(xintercept = m$hour_markers,color = '#CCCCCC') +
